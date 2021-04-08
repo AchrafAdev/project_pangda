@@ -169,9 +169,9 @@ const pangdaGame = {
             this.clearAll()
             this.gameState = "not started"
             setTimeout(() => {
-                const imageInstance = new Image()
-                imageInstance.src = 'images/gameover.png'
-                this.ctx.drawImage(imageInstance, 400, 250, 300, 150)
+                // window.onload(new Image()
+                // imageInstance.src = 'images/gameover.png'
+                // this.ctx.drawImage(imageInstance, 400, 250, 300, 150))
             }, 500);
 
         }
