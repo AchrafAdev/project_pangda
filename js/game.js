@@ -17,6 +17,7 @@ const pangdaGame = {
         this.canvasDom = document.getElementById("canvas")
         this.ctx = this.canvasDom.getContext("2d")
         this.setListeners()
+        this.gameStart()
 
     },
     createPanda() {
@@ -25,6 +26,10 @@ const pangdaGame = {
 
     createVillain() {
         this.balls.push(new Villain(this.ctx, 100, 2, 170 * .25, 200, 170, 10, 20, this.canvasSize));
+        //this.balls.push(new FinalBoss(this.ctx, 100, 2, 170 * 1.3, 200 * 1.3, 170, 10 * 1.15, 20 * 1.15, this.canvasSize))
+
+        console.log(this.balls[0] instanceof FinalBoss)
+
 
     },
     createMedVillain(ballPosition) {
@@ -39,7 +44,7 @@ const pangdaGame = {
     },
     createFinalBoss() {
         if (this.balls.length === 0) {
-            alert('HOLA')
+            this.balls.push(new FinalBoss(this.ctx, 100, 2, 170 * 1.3, 200 * 1.3, 170, 10 * 1.15, 20 * 1.15, this.canvasSize))
         }
     },
 
@@ -136,24 +141,32 @@ const pangdaGame = {
     },
     updateBalls(idx) {
         //alert(this.balls[idx] instanceof FinalBoss)
+        this.panda.harpoon.state = "finished"
+        this.panda.harpoon = null
 
-        if (this.balls[idx] instanceof Villain) {
+        if (!(this.balls[idx] instanceof FinalBoss)) {
 
             const ballPosition = { x: this.balls[idx].ballVillainPos.x, y: this.balls[idx].ballVillainPos.y }
             const size = this.balls[idx].ballVillainSize.w
-            this.panda.harpoon.state = "finished"
-            this.panda.harpoon = null
             this.balls.splice(idx, 1)
 
             const sizeMap = { [170]: () => this.createMedVillain(ballPosition), [170 * .5]: () => this.createSmallVillain(ballPosition), [170 * .25]: () => this.createFinalBoss(ballPosition) }
-
-
             sizeMap[size]()
 
-
-            console.log(this.balls)
-
+        } else {
+            let finalBoss = this.balls[idx];
+            !finalBoss.isHit ? finalBoss.loseLifes() : null
+            console.log(this.balls[idx].lifes)
+            if (!finalBoss.isAlive) {
+                this.balls.pop()
+                this.gameStart()
+            }
         }
+
+
+
+
+
     },
     pandaDamage() {
         !this.panda.isHit ? this.panda.loseLifes() : null
@@ -168,12 +181,23 @@ const pangdaGame = {
             clearInterval(this.interval)
             this.clearAll()
             this.gameState = "not started"
-            setTimeout(() => {
-                // window.onload(new Image()
-                // imageInstance.src = 'images/gameover.png'
-                // this.ctx.drawImage(imageInstance, 400, 250, 300, 150))
-            }, 500);
-
+            const img = new Image()
+            img.src = 'images/gameover.png'
+            //onload de imageInstance
+            img.onload = () => {
+                this.ctx.drawImage(img, 250, 125, 500, 250)
+            }
         }
+    },
+
+    gameStart() {
+        clearInterval(this.interval)
+        this.clearAll()
+        const gif = new Image()
+        gif.src = 'images/win.png'
+        gif.onload = () => {
+            this.ctx.drawImage(gif, 250, 125, 500, 250)
+        }
+
     }
 }

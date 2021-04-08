@@ -47,6 +47,41 @@ class FinalBoss extends Villain {
         super(ctx, posX, posY, sizeW, sizeH, pts, velX, velY, canvasSize)
 
         this.lifes = 5
+        this.isAlive = true
+        this.isHit = false
+        this.init()
+    }
+
+    init() {
+        this.imageInstance = new Image()
+        this.imageInstance.src = ("./images/panther.png")
+    }
+
+    drawBall() {
+        this.move()
+        this.ctx.drawImage(this.imageInstance, this.ballVillainPos.x, this.ballVillainPos.y, this.ballVillainSize.w, this.ballVillainSize.h)
+
+    }
+
+    loseLifes() {
+
+        this.makeInvicible()
+        this.lifes--;
+
+
+        if (this.lifes === 0) {
+
+            this.isAlive = false
+        }
+    }
+
+
+    makeInvicible() {
+        this.isHit = true
+
+        setTimeout(() => {
+            this.isHit = false
+        }, 1500);
     }
 }
 
