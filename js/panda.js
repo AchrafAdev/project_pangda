@@ -6,7 +6,7 @@ class Panda {
         this.pandaSize = { w: 110, h: 110 };
         this.hearts = []
         this.lifes = 3
-        this.lifePosX = 800
+        this.lifePosX = 700
         this.isAlive = true
         this.isHit = false
         this.init()
@@ -61,7 +61,7 @@ class Panda {
         }
 
         this.hearts.forEach(elm => {
-            elm.drawImage()
+            elm.drawHeartPanda()
         })
     }
 

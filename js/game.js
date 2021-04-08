@@ -17,19 +17,15 @@ const pangdaGame = {
         this.canvasDom = document.getElementById("canvas")
         this.ctx = this.canvasDom.getContext("2d")
         this.setListeners()
-        this.gameStart()
-
+        this.setDimensions()
+        this.gameStarted()
     },
     createPanda() {
         this.panda = new Panda(this.ctx, this.canvasDom.width / 2 - 75, 380)
     },
 
     createVillain() {
-        this.balls.push(new Villain(this.ctx, 100, 2, 170 * .25, 200, 170, 10, 20, this.canvasSize));
-        //this.balls.push(new FinalBoss(this.ctx, 100, 2, 170 * 1.3, 200 * 1.3, 170, 10 * 1.15, 20 * 1.15, this.canvasSize))
-
-        console.log(this.balls[0] instanceof FinalBoss)
-
+        this.balls.push(new FinalBoss(this.ctx, 100, 2, 170, 200, 170, 10, 20, this.canvasSize));
 
     },
     createMedVillain(ballPosition) {
@@ -56,7 +52,7 @@ const pangdaGame = {
     },
 
     start() {
-        this.setDimensions()
+
         this.createPanda()
         this.balls = []
         this.createVillain()
@@ -83,6 +79,8 @@ const pangdaGame = {
     },
 
     setListeners() {
+
+
         document.onkeyup = e => {
             if (this.gameState == "not started") {
                 e.key === 'Shift' ? this.start() : null
@@ -92,12 +90,11 @@ const pangdaGame = {
 
         }
         document.addEventListener('keypress', e => {
-            console.log(e.key)
+
             e.key === 'a' ? this.panda.moveLeft() : null
             e.key === 'd' ? this.panda.moveRight() : null
 
         })
-
 
     },
 
@@ -156,15 +153,12 @@ const pangdaGame = {
         } else {
             let finalBoss = this.balls[idx];
             !finalBoss.isHit ? finalBoss.loseLifes() : null
-            console.log(this.balls[idx].lifes)
+
             if (!finalBoss.isAlive) {
                 this.balls.pop()
-                this.gameStart()
+                this.gameFinished()
             }
         }
-
-
-
 
 
     },
@@ -190,13 +184,27 @@ const pangdaGame = {
         }
     },
 
-    gameStart() {
+    gameFinished() {
         clearInterval(this.interval)
         this.clearAll()
+        this.gameState = "not started"
         const gif = new Image()
         gif.src = 'images/win.png'
         gif.onload = () => {
+            console.log(gif)
             this.ctx.drawImage(gif, 250, 125, 500, 250)
+        }
+
+    },
+
+
+
+    gameStarted() {
+        const gif = new Image()
+        gif.src = 'images/insert.png'
+        gif.onload = () => {
+            console.log(gif)
+            this.ctx.drawImage(gif, 100, 200, 800, 150)
         }
 
     }

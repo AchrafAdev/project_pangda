@@ -49,6 +49,8 @@ class FinalBoss extends Villain {
         this.lifes = 5
         this.isAlive = true
         this.isHit = false
+        this.blackHearts = []
+        this.lifePosX = 700
         this.init()
     }
 
@@ -59,18 +61,18 @@ class FinalBoss extends Villain {
 
     drawBall() {
         this.move()
+        this.drawLifes()
         this.ctx.drawImage(this.imageInstance, this.ballVillainPos.x, this.ballVillainPos.y, this.ballVillainSize.w, this.ballVillainSize.h)
 
     }
 
     loseLifes() {
 
-        this.makeInvicible()
         this.lifes--;
-
+        this.blackHearts.pop()
+        this.makeInvicible()
 
         if (this.lifes === 0) {
-
             this.isAlive = false
         }
     }
@@ -82,6 +84,19 @@ class FinalBoss extends Villain {
         setTimeout(() => {
             this.isHit = false
         }, 1500);
+    }
+
+    drawLifes() {
+        if (this.blackHearts.length < this.lifes) {
+            for (let i = 0; i < this.lifes; i++) {
+                this.blackHearts.push(new Heart(this.ctx, this.lifePosX))
+                this.lifePosX += 50
+            }
+        }
+
+        this.blackHearts.forEach(elm => {
+            elm.drawHeartPanter()
+        })
     }
 }
 

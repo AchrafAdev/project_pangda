@@ -1,12 +1,13 @@
 html, body{
     height: 100% ;
     margin: 0;
+    user-select: none;
 }
 
 .container{
     background: url(../images/bambooback.png) no-repeat center;
     background-size: cover;
-    height: 950px;
+    height: 100vh;
     
 }
 .logo{
@@ -30,7 +31,7 @@ html, body{
 #info{
     width: 1000px; 
     height: 150px;
-    background-color: rgba(95, 103, 66, .6);
+    background-color: rgba(95, 103, 66, .8);
     border-radius: 40px;
     background-size: cover;  
     padding-bottom: 20px;
@@ -43,20 +44,6 @@ html, body{
 
 }
 
-h1{
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 25px;
-    letter-spacing: 6px;
-    word-spacing: 6px;
-    color: #d5e6e0;
-    font-weight: 700;
-    text-decoration: none solid rgb(68, 68, 68);
-    font-style: normal;
-    font-variant: normal;
-    text-transform: uppercase;
-    margin-bottom: 0px;
-
-}
 .controls{
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 15px;
