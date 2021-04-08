@@ -7,6 +7,8 @@ const pangdaGame = {
     canvasSize: { width: 0, height: 0 },
     ctx: undefined,
     panda: undefined,
+    audio: undefined,
+    audioIsPlaying: false,
     balls: [],
     interval: undefined,
     gameState: "not started",
@@ -14,18 +16,25 @@ const pangdaGame = {
 
 
     init() {
+
         this.canvasDom = document.getElementById("canvas")
         this.ctx = this.canvasDom.getContext("2d")
         this.setListeners()
         this.setDimensions()
+        this.createAudio()
+
         this.gameStarted()
+    },
+    createAudio() {
+        this.audio = new GameAudio()
+        console.log(this.audio);
     },
     createPanda() {
         this.panda = new Panda(this.ctx, this.canvasDom.width / 2 - 75, 380)
     },
 
     createVillain() {
-        this.balls.push(new FinalBoss(this.ctx, 100, 2, 170, 200, 170, 10, 20, this.canvasSize));
+        this.balls.push(new Villain(this.ctx, 100, 2, 170, 200, 170, 10, 20, this.canvasSize));
 
     },
     createMedVillain(ballPosition) {
@@ -57,7 +66,7 @@ const pangdaGame = {
         this.balls = []
         this.createVillain()
         this.gameState = "started"
-        alert('Hola, bienvenidos a mi juego')
+        this.audio.background.play()
 
         this.interval = setInterval(() => {
             this.clearAll()
@@ -82,18 +91,24 @@ const pangdaGame = {
 
 
         document.onkeyup = e => {
+
             if (this.gameState == "not started") {
                 e.key === 'Shift' ? this.start() : null
             }
+
             e.keyCode === 32 && !this.panda.harpoon ? this.panda.createHarpoon() : null
-
-
         }
+
+
         document.addEventListener('keypress', e => {
 
             e.key === 'a' ? this.panda.moveLeft() : null
             e.key === 'd' ? this.panda.moveRight() : null
 
+        })
+
+        document.addEventListener('click', e => {
+            this.audio.background.play()
         })
 
     },
@@ -141,8 +156,9 @@ const pangdaGame = {
         this.panda.harpoon.state = "finished"
         this.panda.harpoon = null
 
-        if (!(this.balls[idx] instanceof FinalBoss)) {
 
+        if (!(this.balls[idx] instanceof FinalBoss)) {
+            this.audio.tiger.play()
             const ballPosition = { x: this.balls[idx].ballVillainPos.x, y: this.balls[idx].ballVillainPos.y }
             const size = this.balls[idx].ballVillainSize.w
             this.balls.splice(idx, 1)
@@ -151,6 +167,7 @@ const pangdaGame = {
             sizeMap[size]()
 
         } else {
+            this.audio.panther.play()
             let finalBoss = this.balls[idx];
             !finalBoss.isHit ? finalBoss.loseLifes() : null
 
@@ -174,10 +191,10 @@ const pangdaGame = {
         if (!this.panda.isAlive) {
             clearInterval(this.interval)
             this.clearAll()
+            this.audio.gameover.play()
             this.gameState = "not started"
             const img = new Image()
             img.src = 'images/gameover.png'
-            //onload de imageInstance
             img.onload = () => {
                 this.ctx.drawImage(img, 250, 125, 500, 250)
             }
@@ -188,6 +205,7 @@ const pangdaGame = {
         clearInterval(this.interval)
         this.clearAll()
         this.gameState = "not started"
+        this.audio.win.play()
         const gif = new Image()
         gif.src = 'images/win.png'
         gif.onload = () => {
@@ -200,6 +218,7 @@ const pangdaGame = {
 
 
     gameStarted() {
+        //this.audio.background.play()
         const gif = new Image()
         gif.src = 'images/insert.png'
         gif.onload = () => {
