@@ -1,29 +1,23 @@
 html, body{
     height: 100% ;
-  }
+}
 
-.container {
+#game-board {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     
 }
 
 #canvas{
-
-    margin: 0 0px 0px 10px;
     border: 5px solid black;
-
+    margin: 0 auto;
+    background: url(../images/jungle.jpeg) no-repeat center;
+    background-size: cover;
+}
+#info{
+    border: 5px solid red;
+    width: 1000px;
 
 }
 
-.controls{  
-    width: 25%;
-    height: 90vh;
-    margin: 0;
-    background: url('../images/arcade-machine3.png') no-repeat;
-    background-position: 0px 0px;
-    background-size: 80% 90vh;
-
-}
-#game-board{
-    width: 70%;
-}

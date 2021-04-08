@@ -4,7 +4,7 @@ class Panda {
         this.harpoon = undefined;
         //console.log(this.ctx);
         this.pandaPos = { x: posX, y: posY };
-        this.pandaSize = { w: 150, h: 150 };
+        this.pandaSize = { w: 110, h: 110 };
 
         this.init()
 
@@ -24,13 +24,13 @@ class Panda {
     moveLeft() {
 
         if (this.pandaPos.x >= 10) {
-            this.pandaPos.x -= 25
+            this.pandaPos.x -= 30
         }
     }
 
     moveRight() {
         if (this.pandaPos.x <= 830) {
-            this.pandaPos.x += 25
+            this.pandaPos.x += 30
         }
     }
     createHarpoon() {
@@ -45,7 +45,6 @@ class Panda {
             setTimeout(() => {
                 this.harpoon = null
             }, 1000)
-            console.log(this.harpoon.bambooSize);
         }
     }
 }

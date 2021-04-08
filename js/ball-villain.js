@@ -10,7 +10,7 @@ class Villain {
         this.ballVel = { x: velX, y: velY }
         this.ballPhysics = { gravity: .4 }
         this.imageInstance = undefined
-
+        
         this.init()
     }
     init() {

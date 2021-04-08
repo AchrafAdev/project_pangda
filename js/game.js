@@ -19,7 +19,7 @@ const pangdaGame = {
         this.start()
     },
     createPanda() {
-        this.panda = new Panda(this.ctx, this.canvasDom.width / 2 - 75, 320)
+        this.panda = new Panda(this.ctx, this.canvasDom.width / 2 - 75, 380)
     },
 
     createVillain() {
@@ -48,13 +48,13 @@ const pangdaGame = {
             if (this.panda.harpoon) this.panda.harpoon.drawImage()
             if (this.panda.harpoon) this.panda.deleteHarpoon()
 
-            this.pandaCollision() //? //alert("DOLA PEPEPEPEPEPEP") : null
+            this.pandaCollision() // ? alert("DOLA PEPEPEPEPEPEP") : null
 
 
 
             if (this.panda.harpoon) {
-                this.harpoonCollision()[0] ? this.balls.splice(this.harpoonCollision()[1], 1) : null
-                console.log(this.balls)
+                this.harpoonCollision()[0] ? this.updateBalls(this.harpoonCollision()[1]) : null
+
             }
         }, 100);
     },
@@ -62,13 +62,21 @@ const pangdaGame = {
     setListeners() {
         document.onkeyup = e => {
             e.key === 'Shift' ? alert('MONEDA INSERTADA') : null
-            e.key === 'ArrowLeft' ? this.panda.moveLeft() : null
-            e.key === 'ArrowRight' ? this.panda.moveRight() : null
+
+
 
             e.keyCode === 32 && !this.panda.harpoon ? this.panda.createHarpoon() : null
 
 
         }
+        document.addEventListener('keypress', e => {
+            console.log(e.key)
+            e.key === 'a' ? this.panda.moveLeft() : null
+            e.key === 'd' ? this.panda.moveRight() : null
+
+        })
+
+
     },
 
     drawAll() {
@@ -97,8 +105,8 @@ const pangdaGame = {
 
             let bool =
                 this.panda.harpoon.posX > elm.ballVillainPos.x &&
-                this.panda.harpoon.posX < elm.ballVillainPos.x + elm.ballVillainSize.w - 20 &&
-                this.panda.harpoon.posYBullet > elm.ballVillainPos.y &&
+                this.panda.harpoon.posX + 20 < elm.ballVillainPos.x + elm.ballVillainSize.w &&
+                this.panda.harpoon.posYBullet + this.panda.harpoon.bambooSize > elm.ballVillainPos.y &&
                 this.panda.harpoon.posYBullet + 120 < elm.ballVillainPos.y + elm.ballVillainSize.h;
 
             if (bool) {
@@ -109,11 +117,31 @@ const pangdaGame = {
         }),
             index]
     },
-    clearBalls() {
+    updateBalls(idx) {
+        const ballPosition = { x: this.balls[idx].ballVillainPos.x, y: this.balls[idx].ballVillainPos.y }
+        if (this.balls[idx].ballVillainSize.w === 170) {
+            this.balls.splice(idx, 1)
+            this.panda.harpoon.state = "finished"
+            this.panda.harpoon = null
+            this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .5, 200 * .5, 170, 10 * 1.2, 20 * 1.2, this.canvasSize));
+            this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .5, 200 * .5, 170, -10 * 1.2, 20 * 1.2, this.canvasSize));
 
-    }
+        }
+        else if (this.balls[idx].ballVillainSize.w === 170 * .5) {
+            this.balls.splice(idx, 1)
+            this.panda.harpoon.state = "finished"
+            this.panda.harpoon = null
+            this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .25, 200 * .25, 170, 10 * 1.6, 20 * 1.3, this.canvasSize));
+            this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .25, 200 * .25, 170, -10 * 1.6, 20 * 1.3, this.canvasSize));
 
-    ,
+        } else if (this.balls[idx].ballVillainSize.w === 170 * .25) {
+            this.balls.splice(idx, 1)
+            this.panda.harpoon.state = "finished"
+            this.panda.harpoon = null
+        }
+
+    },
+
 
     clearAll() {
         this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h)
