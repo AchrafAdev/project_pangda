@@ -12,6 +12,8 @@ html, body{
 #canvas{
     border: 5px solid black;
     margin: 0 auto;
+    width: 1000px;
+    height: 500px;
     background: url(../images/jungle.jpeg) no-repeat center;
     background-size: cover;
 }

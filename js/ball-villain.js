@@ -10,7 +10,7 @@ class Villain {
         this.ballVel = { x: velX, y: velY }
         this.ballPhysics = { gravity: .4 }
         this.imageInstance = undefined
-        
+
         this.init()
     }
     init() {
@@ -40,11 +40,13 @@ class Villain {
         this.ballVillainPos.x < 0 ? this.ballVel.x *= -1 : null
 
     }
+}
 
-    // Condición a cumplir 
-    // death(){
-    //Cuando sea disparado evoluciona a dos bolas mas pequeñas
-    // }
+class FinalBoss extends Villain {
+    constructor(ctx, posX, posY, sizeW, sizeH, pts, velX, velY, canvasSize) {
+        super(ctx, posX, posY, sizeW, sizeH, pts, velX, velY, canvasSize)
 
+        this.lifes = 5
+    }
 }
 

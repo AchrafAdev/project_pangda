@@ -8,7 +8,8 @@ const pangdaGame = {
     ctx: undefined,
     panda: undefined,
     balls: [],
-    framesCounter: 0,
+    interval: undefined,
+    gameState: "not started",
     canvasDom: undefined,
 
 
@@ -16,17 +17,31 @@ const pangdaGame = {
         this.canvasDom = document.getElementById("canvas")
         this.ctx = this.canvasDom.getContext("2d")
         this.setListeners()
-        this.start()
+
     },
     createPanda() {
         this.panda = new Panda(this.ctx, this.canvasDom.width / 2 - 75, 380)
     },
 
     createVillain() {
-        this.balls.push(new Villain(this.ctx, 100, 2, 170, 200, 170, 10, 20, this.canvasSize));
+        this.balls.push(new Villain(this.ctx, 100, 2, 170 * .25, 200, 170, 10, 20, this.canvasSize));
 
     },
+    createMedVillain(ballPosition) {
+        this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .5, 200 * .5, 170, 10 * 1.2, 20 * 1.2, this.canvasSize));
+        this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .5, 200 * .5, 170, -10 * 1.2, 20 * 1.2, this.canvasSize));
 
+    },
+    createSmallVillain(ballPosition) {
+        this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .25, 200 * .25, 170, 10 * 1.6, 20 * 1.3, this.canvasSize));
+        this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .25, 200 * .25, 170, -10 * 1.6, 20 * 1.3, this.canvasSize));
+
+    },
+    createFinalBoss() {
+        if (this.balls.length === 0) {
+            alert('HOLA')
+        }
+    },
 
 
     setDimensions() {
@@ -38,33 +53,35 @@ const pangdaGame = {
     start() {
         this.setDimensions()
         this.createPanda()
+        this.balls = []
         this.createVillain()
-        //this.createHarpoon()
+        this.gameState = "started"
+        alert('Hola, bienvenidos a mi juego')
 
-        setInterval(() => {
+        this.interval = setInterval(() => {
             this.clearAll()
 
             this.drawAll()
             if (this.panda.harpoon) this.panda.harpoon.drawImage()
             if (this.panda.harpoon) this.panda.deleteHarpoon()
 
-            this.pandaCollision() // ? alert("DOLA PEPEPEPEPEPEP") : null
+            this.pandaCollision() ? this.pandaDamage() : null
 
 
 
             if (this.panda.harpoon) {
                 this.harpoonCollision()[0] ? this.updateBalls(this.harpoonCollision()[1]) : null
-
             }
+
+            this.gameOver()
         }, 100);
     },
 
     setListeners() {
         document.onkeyup = e => {
-            e.key === 'Shift' ? alert('MONEDA INSERTADA') : null
-
-
-
+            if (this.gameState == "not started") {
+                e.key === 'Shift' ? this.start() : null
+            }
             e.keyCode === 32 && !this.panda.harpoon ? this.panda.createHarpoon() : null
 
 
@@ -118,32 +135,45 @@ const pangdaGame = {
             index]
     },
     updateBalls(idx) {
-        const ballPosition = { x: this.balls[idx].ballVillainPos.x, y: this.balls[idx].ballVillainPos.y }
-        if (this.balls[idx].ballVillainSize.w === 170) {
-            this.balls.splice(idx, 1)
+        //alert(this.balls[idx] instanceof FinalBoss)
+
+        if (this.balls[idx] instanceof Villain) {
+
+            const ballPosition = { x: this.balls[idx].ballVillainPos.x, y: this.balls[idx].ballVillainPos.y }
+            const size = this.balls[idx].ballVillainSize.w
             this.panda.harpoon.state = "finished"
             this.panda.harpoon = null
-            this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .5, 200 * .5, 170, 10 * 1.2, 20 * 1.2, this.canvasSize));
-            this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .5, 200 * .5, 170, -10 * 1.2, 20 * 1.2, this.canvasSize));
+            this.balls.splice(idx, 1)
+
+            const sizeMap = { [170]: () => this.createMedVillain(ballPosition), [170 * .5]: () => this.createSmallVillain(ballPosition), [170 * .25]: () => this.createFinalBoss(ballPosition) }
+
+
+            sizeMap[size]()
+
+
+            console.log(this.balls)
 
         }
-        else if (this.balls[idx].ballVillainSize.w === 170 * .5) {
-            this.balls.splice(idx, 1)
-            this.panda.harpoon.state = "finished"
-            this.panda.harpoon = null
-            this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .25, 200 * .25, 170, 10 * 1.6, 20 * 1.3, this.canvasSize));
-            this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .25, 200 * .25, 170, -10 * 1.6, 20 * 1.3, this.canvasSize));
-
-        } else if (this.balls[idx].ballVillainSize.w === 170 * .25) {
-            this.balls.splice(idx, 1)
-            this.panda.harpoon.state = "finished"
-            this.panda.harpoon = null
-        }
-
     },
-
+    pandaDamage() {
+        !this.panda.isHit ? this.panda.loseLifes() : null
+    },
 
     clearAll() {
         this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h)
+    },
+
+    gameOver() {
+        if (!this.panda.isAlive) {
+            clearInterval(this.interval)
+            this.clearAll()
+            this.gameState = "not started"
+            setTimeout(() => {
+                const imageInstance = new Image()
+                imageInstance.src = 'images/gameover.png'
+                this.ctx.drawImage(imageInstance, 400, 250, 300, 150)
+            }, 500);
+
+        }
     }
 }
