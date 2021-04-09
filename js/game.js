@@ -15,6 +15,7 @@ const pangdaGame = {
     canvasDom: undefined,
     marker: undefined,
     points: 0,
+    intervalTimer: 100,
 
 
     init() {
@@ -89,7 +90,7 @@ const pangdaGame = {
             }
 
             this.gameOver()
-        }, 100);
+        }, this.intervalTimer);
     },
 
     setListeners() {
@@ -216,7 +217,8 @@ const pangdaGame = {
             }
             this.ctx.font = "56px Arial";
             this.ctx.fillStyle = "#000000";
-            this.ctx.fillText("Your score: " + this.points, 290, 420);
+            this.points = this.points - (3 - this.panda.lifes) * 9.54
+            this.ctx.fillText("Your score: " + parseInt(this.points), 290, 420);
         }
     },
 
@@ -231,9 +233,11 @@ const pangdaGame = {
             console.log(gif)
             this.ctx.drawImage(gif, 250, 125, 500, 250)
         }
+        (this.intervalTimer == 100) ? this.intervalTimer -= 50 : this.intervalTimer = 100
         this.ctx.font = "56px Arial";
         this.ctx.fillStyle = "#000000";
-        this.ctx.fillText("Your score: " + this.points, 290, 420);
+        this.points = this.points - (3 - this.panda.lifes) * 9.54
+        this.ctx.fillText("Your score: " + parseInt(this.points), 290, 420);
 
     },
 
