@@ -4,8 +4,6 @@ window.onload = () => {
     startGame();
     // };
     function startGame() {
-
-
         pangdaGame.init()
     };
 

@@ -6,8 +6,8 @@ class GameAudio {
         this.win = new Audio('./audio/win.wav')
         this.gameover = new Audio('./audio/gameover.wav')
 
-
-        this.background.volume = 0.1
+        this.background.loop = true
+        this.background.volume = 0.05
         this.tiger.volume = 1
     }
 }

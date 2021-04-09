@@ -13,6 +13,8 @@ const pangdaGame = {
     interval: undefined,
     gameState: "not started",
     canvasDom: undefined,
+    marker: undefined,
+    points: 0,
 
 
     init() {
@@ -22,12 +24,14 @@ const pangdaGame = {
         this.setListeners()
         this.setDimensions()
         this.createAudio()
-
         this.gameStarted()
     },
     createAudio() {
         this.audio = new GameAudio()
         console.log(this.audio);
+    },
+    renderMarker() {
+        this.marker = new Marker(this.ctx, this.points)
     },
     createPanda() {
         this.panda = new Panda(this.ctx, this.canvasDom.width / 2 - 75, 380)
@@ -60,8 +64,10 @@ const pangdaGame = {
         this.canvasDom.height = this.canvasSize.h
     },
 
-    start() {
 
+    loop() {
+
+        //Esto puede ir fuera
         this.createPanda()
         this.balls = []
         this.createVillain()
@@ -70,7 +76,6 @@ const pangdaGame = {
 
         this.interval = setInterval(() => {
             this.clearAll()
-
             this.drawAll()
             if (this.panda.harpoon) this.panda.harpoon.drawImage()
             if (this.panda.harpoon) this.panda.deleteHarpoon()
@@ -93,7 +98,7 @@ const pangdaGame = {
         document.onkeyup = e => {
 
             if (this.gameState == "not started") {
-                e.key === 'Shift' ? this.start() : null
+                e.key === 'Shift' ? this.loop() : null
             }
 
             e.keyCode === 32 && !this.panda.harpoon ? this.panda.createHarpoon() : null
@@ -107,14 +112,19 @@ const pangdaGame = {
 
         })
 
-        document.addEventListener('click', e => {
-            this.audio.background.play()
+        let but = document.querySelector('.button')
+
+        but.addEventListener('click', () => {
+
+            !(this.audioIsPlaying) ? (this.audio.background.play(), this.audioIsPlaying = true, but.innerText = "Sound ON") : (this.audio.background.pause(), this.audioIsPlaying = false, but.innerText = "Sound OFF")
         })
 
     },
 
     drawAll() {
         this.panda.draw()
+        //this.marker.draw()
+        this.renderMarker()
         this.balls.forEach(elm => elm.drawBall())
 
     },
@@ -152,7 +162,7 @@ const pangdaGame = {
             index]
     },
     updateBalls(idx) {
-        //alert(this.balls[idx] instanceof FinalBoss)
+
         this.panda.harpoon.state = "finished"
         this.panda.harpoon = null
 
@@ -161,6 +171,7 @@ const pangdaGame = {
             this.audio.tiger.play()
             const ballPosition = { x: this.balls[idx].ballVillainPos.x, y: this.balls[idx].ballVillainPos.y }
             const size = this.balls[idx].ballVillainSize.w
+            this.points += parseInt(this.balls[idx].ballPoints)
             this.balls.splice(idx, 1)
 
             const sizeMap = { [170]: () => this.createMedVillain(ballPosition), [170 * .5]: () => this.createSmallVillain(ballPosition), [170 * .25]: () => this.createFinalBoss(ballPosition) }
@@ -172,6 +183,7 @@ const pangdaGame = {
             !finalBoss.isHit ? finalBoss.loseLifes() : null
 
             if (!finalBoss.isAlive) {
+                this.points += parseInt(this.balls[idx].ballPoints)
                 this.balls.pop()
                 this.gameFinished()
             }
@@ -196,8 +208,11 @@ const pangdaGame = {
             const img = new Image()
             img.src = 'images/gameover.png'
             img.onload = () => {
-                this.ctx.drawImage(img, 250, 125, 500, 250)
+                this.ctx.drawImage(img, 250, 125, 400, 250)
             }
+            this.ctx.font = "56px Arial";
+            this.ctx.fillStyle = "#000000";
+            this.ctx.fillText("Your score: " + this.points, 290, 420);
         }
     },
 
@@ -212,6 +227,9 @@ const pangdaGame = {
             console.log(gif)
             this.ctx.drawImage(gif, 250, 125, 500, 250)
         }
+        this.ctx.font = "56px Arial";
+        this.ctx.fillStyle = "#000000";
+        this.ctx.fillText("Your score: " + this.points, 290, 420);
 
     },
 

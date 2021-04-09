@@ -1,12 +1,9 @@
 class Harpoon {
-    constructor(ctx, pandaPosX, pandaWidth) {
+    constructor(ctx, pandaPosX) {
 
         this.ctx = ctx;
         this.posX = pandaPosX + 50;
-
-
         this.velY = 50;
-
         this.posYBullet = 450;
         this.state = 'finished';
         this.bambooSize = 10
