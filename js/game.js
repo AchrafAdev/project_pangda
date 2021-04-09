@@ -38,22 +38,22 @@ const pangdaGame = {
     },
 
     createVillain() {
-        this.balls.push(new Villain(this.ctx, 100, 2, 170, 200, 170, 10, 20, this.canvasSize));
+        this.balls.push(new Villain(this.ctx, 100, 2, 170, 200, 100, 10, 20, this.canvasSize));
 
     },
     createMedVillain(ballPosition) {
-        this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .5, 200 * .5, 170, 10 * 1.2, 20 * 1.2, this.canvasSize));
-        this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .5, 200 * .5, 170, -10 * 1.2, 20 * 1.2, this.canvasSize));
+        this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .5, 200 * .5, 150, 10 * 1.2, 20 * 1.2, this.canvasSize));
+        this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .5, 200 * .5, 150, -10 * 1.2, 20 * 1.2, this.canvasSize));
 
     },
     createSmallVillain(ballPosition) {
-        this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .25, 200 * .25, 170, 10 * 1.6, 20 * 1.3, this.canvasSize));
-        this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .25, 200 * .25, 170, -10 * 1.6, 20 * 1.3, this.canvasSize));
+        this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .25, 200 * .25, 200, 10 * 1.6, 20 * 1.3, this.canvasSize));
+        this.balls.push(new Villain(this.ctx, ballPosition.x, ballPosition.y, 170 * .25, 200 * .25, 200, -10 * 1.6, 20 * 1.3, this.canvasSize));
 
     },
     createFinalBoss() {
         if (this.balls.length === 0) {
-            this.balls.push(new FinalBoss(this.ctx, 100, 2, 170 * 1.3, 200 * 1.3, 170, 10 * .8, 20 * .85, this.canvasSize))
+            this.balls.push(new FinalBoss(this.ctx, 100, 2, 170 * 1.3, 200 * 1.3, 300, 10 * .8, 20 * .85, this.canvasSize))
         }
     },
 
@@ -128,7 +128,6 @@ const pangdaGame = {
 
     drawAll() {
         this.panda.draw()
-        //this.marker.draw()
         this.renderMarker()
         this.balls.forEach(elm => elm.drawBall())
 

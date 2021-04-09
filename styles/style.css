@@ -82,7 +82,7 @@ p{
   border: none;
   border-radius: 12px;
   color: white;
-  padding: 20px 38px;
+  padding: 5px 10px;
   text-align: center;
   text-decoration: none;
   font-size: 16px;
@@ -93,8 +93,8 @@ p{
   color: white;
   border: 2px solid #ffffff;
   position: absolute;
-  top: 65vh;
-  left: 55vh;
+  top: 67vh;
+  left: 57vh;
 }
 
 .button:hover {

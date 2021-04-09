@@ -15,7 +15,7 @@ class Marker {
     }
 
     draw() {
-        this.ctx.font = "56px Arial";
+        this.ctx.font = "56px Georgia";
         this.ctx.fillStyle = "#000000";
         this.ctx.fillText(this.mark, 50, 100);
     }
