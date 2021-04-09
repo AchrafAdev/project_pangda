@@ -72,7 +72,7 @@ const pangdaGame = {
         this.balls = []
         this.createVillain()
         this.gameState = "started"
-        this.audio.background.play()
+
 
         this.interval = setInterval(() => {
             this.clearAll()
@@ -116,7 +116,13 @@ const pangdaGame = {
 
         but.addEventListener('click', () => {
 
-            !(this.audioIsPlaying) ? (this.audio.background.play(), this.audioIsPlaying = true, but.innerText = "Sound ON") : (this.audio.background.pause(), this.audioIsPlaying = false, but.innerText = "Sound OFF")
+            !(this.audioIsPlaying) ? (this.audio.background.play(), this.audioIsPlaying = true, but.innerText = "Sound ON", but.style.background = "green") : (this.audio.background.pause(), this.audioIsPlaying = false, but.innerText = "Sound OFF", but.style.background = "red")
+        })
+
+        but.addEventListener('keyup', event => {
+            if (event.which === 32) {
+                event.preventDefault();
+            }
         })
 
     },
