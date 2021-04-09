@@ -51,6 +51,7 @@ class FinalBoss extends Villain {
         this.isHit = false
         this.blackHearts = []
         this.lifePosX = 700
+        this.ballPhysics = { gravity: .8 }
         this.init()
     }
 

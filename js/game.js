@@ -53,7 +53,7 @@ const pangdaGame = {
     },
     createFinalBoss() {
         if (this.balls.length === 0) {
-            this.balls.push(new FinalBoss(this.ctx, 100, 2, 170 * 1.3, 200 * 1.3, 170, 10 * 1.15, 20 * 1.15, this.canvasSize))
+            this.balls.push(new FinalBoss(this.ctx, 100, 2, 170 * 1.3, 200 * 1.3, 170, 10 * .8, 20 * .85, this.canvasSize))
         }
     },
 
@@ -115,12 +115,11 @@ const pangdaGame = {
         let but = document.querySelector('.button')
 
         but.addEventListener('click', () => {
-
             !(this.audioIsPlaying) ? (this.audio.background.play(), this.audioIsPlaying = true, but.innerText = "Sound ON", but.style.background = "green") : (this.audio.background.pause(), this.audioIsPlaying = false, but.innerText = "Sound OFF", but.style.background = "red")
         })
 
         but.addEventListener('keyup', event => {
-            if (event.which === 32) {
+            if (event.which === 32 || event.which === 13) {
                 event.preventDefault();
             }
         })
