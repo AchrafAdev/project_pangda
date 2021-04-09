@@ -16,6 +16,7 @@ const pangdaGame = {
     marker: undefined,
     points: 0,
     intervalTimer: 100,
+    level: 1,
 
 
     init() {
@@ -32,7 +33,7 @@ const pangdaGame = {
         console.log(this.audio);
     },
     renderMarker() {
-        this.marker = new Marker(this.ctx, this.points)
+        this.marker = new Marker(this.ctx, this.points, this.level)
     },
     createPanda() {
         this.panda = new Panda(this.ctx, this.canvasDom.width / 2 - 75, 380)
@@ -233,7 +234,7 @@ const pangdaGame = {
             console.log(gif)
             this.ctx.drawImage(gif, 250, 125, 500, 250)
         }
-        (this.intervalTimer == 100) ? this.intervalTimer -= 50 : this.intervalTimer = 100
+        (this.intervalTimer == 100) ? (this.intervalTimer -= 50, this.level = 2) : (this.intervalTimer = 100, this.points = 0, this.level = 1)
         this.ctx.font = "56px Arial";
         this.ctx.fillStyle = "#000000";
         this.points = this.points - (3 - this.panda.lifes) * 9.54
